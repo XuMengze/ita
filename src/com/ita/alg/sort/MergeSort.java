@@ -27,13 +27,14 @@ public class MergeSort implements Sort {
         int[] assist = new int[r - p + 1];
         int i = p, j = q + 1;
         while (i <= q && j <= r) {
-            if (arr[i] <= arr[j]) {
-                assist[i + j - p - q - 1] = arr[i];
-                i++;
-            } else {
-                assist[i + j - p - q - 1] = arr[j];
-                j++;
-            }
+            assist[i + j - p - q - 1] = arr[i] <= arr[j] ? arr[i++] : arr[j++];
+//            if (arr[i] <= arr[j]) {
+//                assist[i + j - p - q - 1] = arr[i];
+//                i++;
+//            } else {
+//                assist[i + j - p - q - 1] = arr[j];
+//                j++;
+//            }
         }
         if (i == q + 1) {
             for (int k = j; k <= r; k++) {
