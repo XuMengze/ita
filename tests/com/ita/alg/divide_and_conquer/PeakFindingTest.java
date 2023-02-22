@@ -27,7 +27,7 @@ public class PeakFindingTest {
                 new int[]{15, 9, 11, 17},
                 new int[]{16, 17, 19, 20}
         });
-        System.out.println(res);
+        assert res.equals(new Coordinate(3,3));
     }
     @Test
     public void TestTwoDimensionalDivideAndConquer() {
@@ -37,7 +37,7 @@ public class PeakFindingTest {
                 new int[]{15, 9, 11, 17},
                 new int[]{16, 17, 19, 20}
         });
-        System.out.println(res);
+        assert res.equals(new Coordinate(3,3));
     }
 
 }
