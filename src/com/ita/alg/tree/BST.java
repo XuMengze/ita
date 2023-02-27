@@ -1,15 +1,17 @@
-package com.ita.alg.model;
+package com.ita.alg.tree;
 
+import com.ita.alg.model.TreeNode;
 import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BinarySearchTree {
+// BinarySearchTree
+public class BST {
     @Getter
     private TreeNode root;
 
-    public BinarySearchTree() {
+    public BST() {
 
     }
 
