@@ -11,8 +11,7 @@ public class BSTSort implements Sort {
         for (int i = 0; i < arr.length; i++) {
             bst.insert(arr[i]);
         }
-        bst.getRoot().print();
-        List<Integer> r = bst.getKeySequence();
+        List<Integer> r = bst.getRoot().getKeySequence();
         for (int i = 0; i < arr.length; i++) {
             arr[i] = r.get(i);
         }

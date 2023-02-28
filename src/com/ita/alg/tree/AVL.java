@@ -21,10 +21,11 @@ public class AVL {
     }
 
     private void insertRecursive(TreeNode node, int item) {
-        node.extra.put(HEIGHT, (Integer) (node.extra.get(HEIGHT)) + 1);
         if (node.key >= item) {
             if (node.left == null) {
                 node.left = newNodeWithHeight(item);
+                node.left.parent = node;
+                updateHeight(node);
                 balanceTree(node);
             } else {
                 insertRecursive(node.left, item);
@@ -32,11 +33,21 @@ public class AVL {
         } else {
             if (node.right == null) {
                 node.right = newNodeWithHeight(item);
+                node.right.parent = node;
+                updateHeight(node);
                 balanceTree(node);
             } else {
                 insertRecursive(node.right, item);
             }
         }
+    }
+
+    private void updateHeight(TreeNode node) {
+        if (node == null) {
+            return;
+        }
+        node.extra.put(HEIGHT, Math.max(getHeight(node.left), getHeight(node.right)) + 1);
+        updateHeight(node.parent);
     }
 
     private void balanceTree(TreeNode node) {
@@ -71,16 +82,50 @@ public class AVL {
     }
 
     private TreeNode rotateLeft(TreeNode node) {
+        TreeNode originalParent = node.parent;
         TreeNode right = node.right;
         node.right = right.left;
+        if (node.right != null) {
+            node.right.parent = node;
+        }
         right.left = node;
+        node.parent = right;
+        right.parent = originalParent;
+        if (node == root) {
+            root = right;
+        } else {
+            if (node == originalParent.left) {
+                originalParent.left = right;
+            } else {
+                originalParent.right = right;
+            }
+        }
+        node.extra.put(HEIGHT, Math.max(getHeight(node.left), getHeight(node.right)) + 1);
+        right.extra.put(HEIGHT, Math.max(getHeight(right.left), getHeight(right.right)) + 1);
         return right;
     }
 
     private TreeNode rotateRight(TreeNode node) {
+        TreeNode originalParent = node.parent;
         TreeNode left = node.left;
         node.left = left.right;
+        if (node.left != null) {
+            node.left.parent = node;
+        }
         left.right = node;
+        node.parent = left;
+        left.parent = originalParent;
+        if (node == root) {
+            root = left;
+        } else {
+            if (node == originalParent.left) {
+                originalParent.left = left;
+            } else {
+                originalParent.right = left;
+            }
+        }
+        node.extra.put(HEIGHT, Math.max(getHeight(node.left), getHeight(node.right)) + 1);
+        left.extra.put(HEIGHT, Math.max(getHeight(left.left), getHeight(left.right)) + 1);
         return left;
 
     }
@@ -100,10 +145,10 @@ public class AVL {
 
         public static BalanceStatus getNodeBalanceStatus(TreeNode node) {
             if (getHeight(node.right) - getHeight(node.left) >= 2) {
-                return LEFT_HEAVY;
+                return RIGHT_HEAVY;
             }
             if (getHeight(node.left) - getHeight(node.right) >= 2) {
-                return RIGHT_HEAVY;
+                return LEFT_HEAVY;
             }
             return BALANCED;
         }
@@ -205,6 +250,7 @@ public class AVL {
                 } else {
                     tmp.right = null;
                 }
+                updateHeight(tmp);
                 balanceTree(tmp);
             }
             case LEFT_ONLY -> {
@@ -214,6 +260,7 @@ public class AVL {
                 } else {
                     tmp.right = node.left;
                 }
+                updateHeight(tmp);
                 balanceTree(tmp);
             }
             case RIGHT_ONLY -> {
@@ -223,6 +270,7 @@ public class AVL {
                 } else {
                     tmp.right = node.right;
                 }
+                updateHeight(tmp);
                 balanceTree(tmp);
             }
             case BOTH -> {

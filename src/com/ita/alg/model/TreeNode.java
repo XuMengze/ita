@@ -78,4 +78,17 @@ public class TreeNode {
         }
         return Math.max(height(node.left), height(node.right)) + 1;
     }
+    public List<Integer> getKeySequence() {
+        List<Integer> result = new ArrayList<>();
+        middleOrderTraverse(this, result);
+        return result;
+    }
+    private void middleOrderTraverse(TreeNode node, List<Integer> elements) {
+        if (node == null){
+            return;
+        }
+        middleOrderTraverse(node.left, elements);
+        elements.add(node.key);
+        middleOrderTraverse(node.right, elements);
+    }
 }
