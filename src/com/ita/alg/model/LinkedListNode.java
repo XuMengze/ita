@@ -1,6 +1,11 @@
 package com.ita.alg.model;
 
-public class LinkedListNode {
-    int val;
-    LinkedListNode next, prev;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class LinkedListNode<T> {
+    T val;
+    LinkedListNode<T> next, prev;
 }
