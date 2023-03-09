@@ -1,7 +1,12 @@
 package com.ita.alg.util;
 
 public class NumericCalculationUtil {
+
     public static String intAdd(String n1, String n2) {
+        return intAdd(n1, n2, 0);
+    }
+
+    public static String intAdd(String n1, String n2, int carry) {
         if (n1.length() < n2.length()) {
             String tmp = n2;
             n2 = n1;
@@ -10,7 +15,7 @@ public class NumericCalculationUtil {
         n1 = new StringBuilder(n1).reverse().toString();
         n2 = new StringBuilder(n2).reverse().toString();
         StringBuilder res = new StringBuilder();
-        int carry = 0;
+        // int carry = carry;
         for (int i = 0; i < n2.length(); i++) {
             int digit = Integer.parseInt(n1.charAt(i) + "") + Integer.parseInt(n2.charAt(i) + "") + carry;
             carry = digit / 10;
@@ -60,5 +65,36 @@ public class NumericCalculationUtil {
             res.append(carry);
         }
         return res.reverse().toString();
+    }
+
+    public static String doubleAdd(String n1, String n2) {
+        String[] number1 = n1.split("\\.");
+        String[] number2 = n2.split("\\.");
+        if (number1.length == 2 && number2.length == 2) {
+            String number1Decimal = number1[1];
+            String number2Decimal = number2[1];
+            int zeroNumber = Math.abs(number1Decimal.length() - number2Decimal.length());
+            String zeroes = "";
+            for (int i = 0; i < zeroNumber; i++) {
+                zeroes += "0";
+            }
+            if (number1Decimal.length() < number2Decimal.length()) {
+                number1Decimal += zeroes;
+            } else {
+                number2Decimal += zeroes;
+            }
+            String decimalSum = intAdd(number1Decimal, number2Decimal);
+            if (decimalSum.length() > number1Decimal.length()) {
+                return intAdd(number1[0], number2[0], 1) + "." + decimalSum.substring(1);
+            } else {
+                return intAdd(number1[0], number2[0], 0) + "." + decimalSum;
+            }
+        } else if (number1.length == 2) {
+            return intAdd(number1[0], number2[0], 0) + "." + number1[1];
+        } else if (number2.length == 2) {
+            return intAdd(number1[0], number2[0], 0) + "." + number2[1];
+        } else {
+            return intAdd(number1[0], number2[0], 0);
+        }
     }
 }

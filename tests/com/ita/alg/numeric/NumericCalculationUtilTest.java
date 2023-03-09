@@ -12,4 +12,8 @@ public class NumericCalculationUtilTest {
     public void testMultiple() {
         System.out.println(NumericCalculationUtil.intMultiple("99", "1"));
     }
+    @Test
+    public void testAddDouble() {
+        System.out.println(NumericCalculationUtil.doubleAdd("1", "1.6"));
+    }
 }
