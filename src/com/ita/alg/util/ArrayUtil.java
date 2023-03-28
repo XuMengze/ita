@@ -6,4 +6,12 @@ public class ArrayUtil {
         arr[i] = arr[j];
         arr[j] = tmp;
     }
+
+    public static int[] toBasicArray(Integer[] arr) {
+        int[] res = new int[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            res[i] = arr[i];
+        }
+        return res;
+    }
 }

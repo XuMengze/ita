@@ -20,9 +20,15 @@ public class TreeUtilTest {
 
         System.out.println(Arrays.toString(TreeUtil.marshalWithKey(root)));
     }
+
     @Test
     public void testUnMarshal() {
-        TreeNode root = TreeUtil.unmarshalWithKey(new String[]{"3", "4", "5", "1", "null", "null", "2" });
+        TreeNode root = TreeUtil.unmarshalWithKey(new String[]{"3", "4", "5", "1", "null", "null", "2"});
         System.out.println(root.key);
+    }
+
+    @Test
+    public void testPre() {
+        System.out.println(Arrays.toString(TreeUtil.traversePreOrder(TreeUtil.unmarshalWithKey(new String[]{"1", "2", "3", "4", "5", "6"}))));
     }
 }

@@ -38,4 +38,15 @@ public class BST {
             }
         }
     }
+
+    public boolean isValidBST(TreeNode root) {
+        return isValidBST(root, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    }
+
+    public boolean isValidBST(TreeNode root, int leftBoundary, int rightBoundary) {
+        if (root == null) {
+            return true;
+        }
+        return root.key < rightBoundary && root.key > leftBoundary && isValidBST(root.left, leftBoundary, root.key) && isValidBST(root.right, root.key, rightBoundary);
+    }
 }
