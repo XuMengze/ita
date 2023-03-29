@@ -49,4 +49,8 @@ public class BST {
         }
         return root.key < rightBoundary && root.key > leftBoundary && isValidBST(root.left, leftBoundary, root.key) && isValidBST(root.right, root.key, rightBoundary);
     }
+
+    public TreeNode Convert(TreeNode pRootOfTree) {
+        return null;
+    }
 }

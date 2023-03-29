@@ -2,11 +2,43 @@ package com.ita.alg.util;
 
 import com.ita.alg.model.LinkedListNode;
 import com.ita.alg.model.ListNode;
+import com.ita.alg.model.TreeNode;
 
 import java.util.*;
 
 public class LinkedListUtil<T> {
-    LinkedListNode<T> reverse(LinkedListNode<T> head) {
+    public static int[] marshalWithVal(ListNode head) {
+        List<Integer> l = new ArrayList<>();
+        while (head != null) {
+            l.add(head.val);
+            head = head.next;
+        }
+        return ArrayUtil.toBasicArray(l.toArray(new Integer[0]));
+    }
+
+    public static ListNode unmarshalWithVal(int[] nodes) {
+        ListNode dummy = new ListNode(-1);
+        ListNode start = dummy;
+        for (int i : nodes) {
+            start.next = new ListNode(i);
+            start = start.next;
+        }
+        return dummy.next;
+    }
+
+    public static void printListNode(ListNode head) {
+        StringBuilder sb = new StringBuilder();
+        while (head != null) {
+            sb.append(head.val);
+            if (head.next != null) {
+                sb.append(" -> ");
+            }
+            head = head.next;
+        }
+        System.out.println(sb);
+    }
+
+    public LinkedListNode<T> reverse(LinkedListNode<T> head) {
         if (head == null || head.getNext() == null) {
             return head;
         }
@@ -99,7 +131,7 @@ public class LinkedListUtil<T> {
 
     }
 
-    ListNode reverse(ListNode head) {
+    public ListNode reverse(ListNode head) {
         if (head == null || head.next == null) {
             return head;
         }
@@ -191,4 +223,101 @@ public class LinkedListUtil<T> {
         }
         return meet;
     }
+
+    private ListNode mergeSortedList(ListNode l1, ListNode l2) {
+        if (l1 == null) {
+            return l2;
+        }
+        if (l2 == null) {
+            return l1;
+        }
+        ListNode dummy = new ListNode(-1);
+        ListNode start = dummy;
+        while (l1 != null && l2 != null) {
+            if (l1.val <= l2.val) {
+                start.next = l1;
+                l1 = l1.next;
+            } else {
+                start.next = l2;
+                l2 = l2.next;
+            }
+            start = start.next;
+        }
+        if (l1 != null) {
+            start.next = l1;
+        } else {
+            start.next = l2;
+        }
+        return dummy.next;
+    }
+
+    private ListNode mergeKLists(ArrayList<ListNode> lists, int left, int right) {
+        if (left > right) {
+            return null;
+        }
+        if (left == right) {
+            return lists.get(left);
+        }
+        int mid = (left + right) / 2;
+        return mergeSortedList(mergeKLists(lists, left, mid), mergeKLists(lists, mid + 1, right));
+    }
+
+    public ListNode mergeKLists(ArrayList<ListNode> lists) {
+        return mergeKLists(lists, 0, lists.size() - 1);
+    }
+
+    public ListNode reverseBetween(ListNode head, int m, int n) {
+        if (m >= n)
+            return head;
+        ListNode dummy = new ListNode(-1);
+        dummy.next = head;
+        ListNode firstPartEnd = findPreByPosition(dummy, m);
+        ListNode secondPartEnd = findPreByPosition(dummy, n).next;
+        ListNode thirdPart = secondPartEnd == null ? null : secondPartEnd.next;
+        if (secondPartEnd != null) {
+            secondPartEnd.next = null;
+        }
+        firstPartEnd.next = reverse(firstPartEnd.next);
+        while (firstPartEnd.next != null) {
+            firstPartEnd = firstPartEnd.next;
+        }
+        firstPartEnd.next = thirdPart;
+        return dummy.next;
+    }
+
+    // Pre is the node before the node with target value, should be used with dummy ahead
+    private ListNode findPreByTarget(ListNode head, int value) {
+        while (head.next != null && head.next.val != value) {
+            head = head.next;
+        }
+        if (head.next == null) {
+            return null;
+        }
+        return head;
+    }
+
+    // Pre is the node before target position.
+    // Unlike array, position starts from 1, should be used with dummy ahead
+    private ListNode findPreByPosition(ListNode head, int pos) {
+        for (int i = 0; i < pos - 1; i++) {
+            if (head.next != null) {
+                head = head.next;
+            }
+        }
+        return head;
+    }
+
+    public ListNode reverseKGroup(ListNode head, int k) {
+        int count = 0;
+        ListNode start = head;
+        while (start != null) {
+            start = start.next;
+            count++;
+        }
+        for (int i = 0; i < count / k; i++) {
+            head = reverseBetween(head, i * k + 1, (i + 1) * k);
+        }
+        return head;
+    }
 }
+
