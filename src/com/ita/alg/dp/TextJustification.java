@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class TextJustification {
@@ -84,5 +85,57 @@ public class TextJustification {
 
     static class NoSolutionException extends Exception {
 
+    }
+
+    public List<String> fullJustify(int maxWidth) {
+        List<String> res = new ArrayList<>();
+        int index = 0;
+        while (index < words.length) {
+            List<String> middle = new ArrayList<>();
+            int length = 0;
+            if (words[index].length() >= maxWidth) {
+                res.add(words[index++]);
+                continue;
+            }
+            while (length + words[index].length() + (middle.size() > 1 ? middle.size() - 1 : 0) < maxWidth) {
+                middle.add(words[index]);
+                length += words[index++].length();
+                if (index >= words.length) {
+                    break;
+                }
+            }
+            if (index >= words.length) {
+                String lastLine = String.join(" ", middle);
+                lastLine += String.join("", Collections.nCopies(maxWidth - lastLine.length(), " "));
+                res.add(lastLine);
+            } else {
+                res.add(convert(middle, maxWidth));
+            }
+        }
+        return res;
+    }
+
+    private String convert(List<String> input, int width) {
+        if (input.size() == 1) {
+            return input.get(0) + String.join("", Collections.nCopies(width - input.get(0).length(), " "));
+        }
+        int length = 0;
+        for (String s : input) {
+            length += s.length();
+        }
+        int spaceCount = width - length;
+        int allocate = input.size() - 1;
+        StringBuilder sb = new StringBuilder();
+        int index = 0;
+        for (int i = 0; i < spaceCount % allocate; i++) {
+            sb.append(input.get(index++));
+            sb.append(String.join("", Collections.nCopies(spaceCount / allocate + 1, " ")));
+        }
+        for (int i = 0; i < input.size() - 1 - spaceCount % allocate; i++) {
+            sb.append(input.get(index++));
+            sb.append(String.join("", Collections.nCopies(spaceCount / allocate, " ")));
+        }
+        sb.append(input.get(index));
+        return sb.toString();
     }
 }
